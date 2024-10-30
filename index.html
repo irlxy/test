@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشغل صوت يوتيوب مباشر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        iframe {
+            display: none; /* إخفاء iframe */
+        }
+    </style>
+</head>
+<body>
+    <h1>مشغل صوت يوتيوب مباشر</h1>
+    <input type="text" id="youtube-url" placeholder="أدخل رابط يوتيوب هنا" />
+    <input type="text" id="audio-url" placeholder="أدخل رابط صوت هنا" />
+    <button id="convert-button">تحويل إلى رابط صوت</button>
+    <button id="play-button">تشغيل الصوت</button>
+
+    <iframe id="youtube-iframe" 
+            width="560" 
+            height="315" 
+            src="" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen></iframe>
+
+    <audio id="audio-player" controls style="display:none;"></audio>
+
+    <script>
+        document.getElementById('convert-button').addEventListener('click', function() {
+            var youtubeUrl = document.getElementById('youtube-url').value;
+
+            // استخراج الفيديو ID من رابط يوتيوب
+            var videoId = youtubeUrl.split('v=')[1];
+            var ampersandPosition = videoId.indexOf('&');
+            if (ampersandPosition !== -1) {
+                videoId = videoId.substring(0, ampersandPosition);
+            }
+
+            // تحويل الرابط إلى رابط صوت (افتراضي)
+            var audioUrl = `https://www.yt-download.org/api/button/mp3/${videoId}`;
+            document.getElementById('audio-url').value = audioUrl;
+            alert('تم تحويل الرابط إلى: ' + audioUrl);
+        });
+
+        document.getElementById('play-button').addEventListener('click', function() {
+            var youtubeUrl = document.getElementById('youtube-url').value;
+            var audioUrl = document.getElementById('audio-url').value;
+
+            // تشغيل فيديو يوتيوب
+            var videoId = youtubeUrl.split('v=')[1];
+            var ampersandPosition = videoId.indexOf('&');
+            if (ampersandPosition !== -1) {
+                videoId = videoId.substring(0, ampersandPosition);
+            }
+            var iframe = document.getElementById('youtube-iframe');
+            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&mute=1';
+            iframe.style.display = 'block'; // إظهار iframe
+
+            // تشغيل الصوت
+            var audioPlayer = document.getElementById('audio-player');
+            audioPlayer.src = audioUrl;
+            audioPlayer.play();
+            audioPlayer.style.display = 'block'; // إظهار مشغل الصوت
+        });
+    </script>
+</body>
+</html>
